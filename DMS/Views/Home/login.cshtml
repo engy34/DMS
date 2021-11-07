@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewBag.Title = "login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<form class="form-horizontal Loginn">
+    <fieldset>
+        <legend>Welcome</legend>
+        <div class="form-group mail">
+            <label for="inputEmail" class="col-lg-2 control-label">Email</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputEmail" placeholder="Email">
+            </div>
+        </div>
+        <div class="form-group pass">
+            <label for="inputPassword" class="col-lg-2 control-label">Password</label>
+            <div class="col-lg-10">
+                <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+              
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+
+                <div class="col-md-9 col-sm-12 col-xs-12 form-group direction"style="text-align:center">
+                    <a  id="login" class="btn btn-primary">Submit</a>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12 form-group direction"style="text-align:center;padding-top:35px">
+                    <a id="Register"href="@Url.Action("Register", "Home")" style="color:red">Not Register Yet ?</a>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+<script>
+            $('#login').click(function () {
+                var email = $('#inputEmail').val();
+                var pass = $('#inputPassword').val();
+
+
+                if (email == '' || pass == '') {
+                    alert('برجاء الانتهاء من جميع البيانات');
+                    $('#login').prop('disabled', true);
+
+                    return;
+                }
+            $.ajax({
+
+                contentType: "application/json; charset=utf-8",
+                url: "@Url.Action("getUsers", "Home")",
+                data: { "email": email,"password":pass },
+                dataType: "json",
+                success: function (data) {
+                    var CustCode = data.CustCode;
+                    var Username = data.Username;
+                    localStorage.setItem("CustCode", CustCode);
+                    localStorage.setItem("CustName", Username);
+                    if (data.Username == "Admin") { location.href = window.origin + '/Shopping/Index';}
+                    else { location.href = window.origin + '/Shopping/Index'; }
+               
+
+            },
+                error: function (result) {
+                    alert("Sorry User not found!!")
+                }
+        });
+
+
+
+        })
+</script>

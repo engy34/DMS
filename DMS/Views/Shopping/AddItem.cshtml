@@ -1,0 +1,190 @@
+﻿
+@{
+    ViewBag.Title = "AddItem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>AddItem</h2>
+
+<form class="form-horizontal Loginn">
+    <fieldset>
+        <legend>Welcome</legend>
+        <div class="form-group ">
+            <label for="name" class="col-lg-2 control-label">Item name</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="name">
+            </div>
+        </div>
+        <div class="form-group ">
+            <label for="desc" class="col-lg-2 control-label">Description</label>
+            <div class="col-lg-10">
+                <textarea type="text" class="form-control" id="desc"></textarea>
+
+            </div>
+        </div>
+        <div class="form-group ">
+            <label for="upload" class="col-lg-2 control-label">img</label>
+            <div class="col-lg-10">
+                <input type="file" class="form-control" id="upload" onclick="upload();"/>
+
+            </div>
+        </div>
+        <div class="form-group ">
+            <label for="upload" class="col-lg-2 control-label">img</label>
+            <div class="col-lg-10 ">
+                <img  class="img-responsive" id="targetimg" />
+
+            </div>
+        </div>
+        <div class="form-group ">
+            <label for="category" class="col-lg-2 control-label">Category</label>
+            <div class="col-lg-10">
+                <select class="form-control" id="Category">
+                    <option value="0">fashion</option>
+                    <option value="1">electronics</option>
+                </select>
+
+            </div>
+        </div>
+        <div class="form-group ">
+            <label for="price" class="col-lg-2 control-label">price </label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="price">
+            </div>
+        </div>
+        <div class="form-group ">
+            <label for="qty" class="col-lg-2 control-label">qty</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="qty">
+            </div>
+        </div>
+        <div class="form-group ">
+            <label for="uom" class="col-lg-2 control-label">unit</label>
+            <div class="col-lg-10">
+                <select class="form-control" id="uom">
+                </select>
+
+            </div>
+        </div>
+        <div class="form-group ">
+            <label for="color" class="col-lg-2 control-label">color</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="color">
+            </div>
+        </div>
+        <div class="form-group ">
+            <label for="tax" class="col-lg-2 control-label">Tax</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="tax">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+
+                <div class="col-md-9 col-sm-12 col-xs-12 form-group direction" style="text-align:center">
+                    <a id="save" class="btn btn-primary" onclick="save()">Save</a>
+                </div>
+
+
+                <div class="col-md-9 col-sm-12 col-xs-12 form-group direction" style="text-align:center">
+                    <a  class="btn btn-primary" onclick="upload()">upload</a>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+<script>
+    $(document).ready(function () {
+        GetUnits();
+        $('#upload').change(function () {
+            var file = this.files;
+            if (file && file[0]) {
+                ReadImage(file[0])
+            }
+        });
+
+    });
+    function GetUnits() {
+                     $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetUnits", "Shopping")",
+
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+                         success: function (Result) {
+
+                if (Result.length != 0) {
+                    $('#uom').val(Result[0].id).html(Result[0].UOM1)
+                    $.each(Result, function (key, value) {
+                        $('#uom').append($("<option></option>").val(value.id).html(value.UOM1))
+                    });
+                }
+            }
+        });
+
+    }
+    function save() {
+        var itemName = $('#name').val();
+        var desc = $('#desc').val();
+        var Category = $('#Category').val();
+        var price = $('#price').val();
+        var qty = $('#qty').val();
+        var unit = $('#uom').val();
+        var color = $('#color').val();
+        var tax = $('#tax').val();
+        if (itemName == '' || desc == '' || Category == '' || price == '' || qty == '' || unit == '' || color == '' || tax == '') {
+            alert('برجاء الانتهاء من جميع البيانات');
+            $('#save').prop('disabled', true);
+
+            return;
+        }
+
+           $.ajax({
+               type: "POST",
+                contentType: "application/json; charset=utf-8",
+               url: "@Url.Action("save", "Shopping")",
+               data: "{'itemName':'" + itemName + "','desc':'" + desc + "','Category':'" + Category + "','price':'" + price + "','qty':'" + qty + "','unit':'" + unit + "','color':'" + color + "','tax':'" + tax + "'}",
+                dataType: "json",
+               success: upload(),
+
+               complete:"@Url.Action("Index", "Shopping")",
+        });
+
+
+
+        }
+    var ReadImage = function (file) {
+
+        var reader = new FileReader;
+        var image = new Image;
+        reader.readAsDataURL(file);
+        reader.onload = function (_file) {
+            image.src = _file.target.result;
+            image.onload = function () {
+                var height = this.height;
+                var width = this.width;
+                var type = file.type;
+                var size = ~~(file.size / 1024) + "KB";
+                $('#targetimg').attr('src', _file.target.result);
+            }
+
+        }
+    }
+
+    function upload() {
+        var file = $('#upload').get(0).files;
+        var data = new FormData;
+        data.append("ImageFile", file[0]);
+        $.ajax({
+
+            type: "post",
+            url: "@Url.Action("upload", "Shopping")",
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function () {
+
+            }
+        })
+    }
+</script>

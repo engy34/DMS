@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Register</h2>
+<form class="form-horizontal Loginn">
+    <fieldset>
+        <legend>Welcome</legend>
+        <div class="form-group ">
+            <label for="userName" class="col-lg-2 control-label">UserName</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="userName" placeholder="UserName">
+            </div>
+        </div>
+        <div class="form-group mail">
+            <label for="inputEmail" class="col-lg-2 control-label">Email</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputEmail" placeholder="Email">
+            </div>
+        </div>
+        <div class="form-group pass">
+            <label for="inputPassword" class="col-lg-2 control-label">Password</label>
+            <div class="col-lg-10">
+                <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+
+            </div>
+        </div>
+        <div class="form-group pass">
+            <label for="inputPassword2" class="col-lg-2 control-label">Password</label>
+            <div class="col-lg-10">
+                <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
+
+            </div>
+        </div>
+        <div class="form-group pass">
+            <label for="phone" class="col-lg-2 control-label">Phone</label>
+            <div class="col-lg-10"> 
+                <input type="text" class="form-control" id="phone" placeholder="Phone">
+
+            </div>
+        </div>
+        <div class="form-group ">
+            <label for="sex" class="col-lg-2 control-label">sex</label>
+            <div class="col-lg-10">
+                <select class="form-control" id="sex">
+                    <option value="0">male</option>
+                    <option value="1">female</option>
+                </select>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+
+                <div class="col-md-9 col-sm-12 col-xs-12 form-group direction" style="text-align:center">
+                    <a class="btn btn-primary" id="btnSave" onclick="save();">+ Register   </a>
+                </div>
+
+
+            </div>
+        </div>
+    </fieldset>
+</form>
+<script>
+    function save() {
+        var username = $('#userName').val();
+        var password = $('#inputPassword').val();
+        var password2 = $('#inputPassword2').val();
+        var sex = $('#sex').val();
+        var email = $('#inputEmail').val();
+        var phone = $('#phone').val();
+        if (username == '' || password == '' || sex == '' || email == '' || phone == '') {
+            alert('برجاء الانتهاء من جميع البيانات');
+            $('#btnSave').prop('disabled', true);
+
+            return;
+        }
+        if (password !== password2) {
+            alert('the pass does not match');
+            $('#btnSave').prop('disabled', true);
+
+            return;
+        }
+         $.ajax({
+            type: "POST",
+            url: "@Url.Action("save", "Home")",
+             data: "{'username':'" + username + "','password':'" + password + "','sex':'" + sex + "','email':'" + email + "','phone':'" + phone +"'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+             success: function (result) {
+               
+                    Notif = "<div class='alert alert-success' role='alert'><strong>Well done!</strong> تم بنجاح.</div>";
+                    window.location.href = '@Url.Action("Index", "Shopping")';
+            },
+            error: function () {
+                Notif = "<div class='alert alert-danger' role='alert'><strong>هناك مشكلة!</strong> برجاء مراجعة البيانات المدخلة.</div>";
+
+            }
+
+        })
+    }
+
+</script>

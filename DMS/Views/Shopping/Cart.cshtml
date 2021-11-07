@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Cart</h2>
+
+
+<div class="content-wrapper" style="direction: rtl;text-align: right;">
+
+    <div class="row" style="width:80%">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="card card-default">
+                <div class="card-body">
+
+
+                    <div class="table-responsive direction" id="ShoppingCart">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+        $(document).ready(function () {
+            GetOrders();
+        })
+          function GetOrders() {
+              var custid = localStorage.getItem('CustCode');
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetOrders", "Shopping")",
+            contentType: "application/json; charset=utf-8",
+            data: "{'custid':'" + custid + "'}",
+            dataType: 'json',
+            success: function (data) {
+                var HTML = "<table id='tblData' class='table table-striped table-bordered table-hover direction'>";
+                HTML += "<tr>";
+                HTML += "<th  ></th>";
+                HTML += "<th  >Order No </th>";
+                HTML += "<th>order Date/th>";
+                HTML += "<th  >item price</th>";
+                HTML += "<th >qty</th>";
+
+                HTML += "<th  class='thtdDirection'>total price </th>";
+
+                HTML += "</tr>";
+
+                $.each(data, function (key, value) {
+                    HTML += "<tr>";
+                    HTML += "<td><a onclick='deletefromCart("+value.id+")'> <span class='glyphicon  glyphicon-trash' aria-hidden='true'></span> </a></td>";
+                    HTML += "<td>" + value.id + "</td>";
+                    HTML += "<td>" + value.date + "</td>";
+                    HTML += "<td>" + value.ItemPrice + "</td>";
+                    HTML += "<td>" + value.Qty + "</td>";
+                    HTML += "<td>" + value.TotalPrice + "</td>";
+
+
+
+
+
+                 /*   HTML += "<td><a href= " + window.location.origin + "/Reports/Report.aspx?reportType=Sales_Invoice.rpt&Sortfi=" + value.SortFi + " target='_blank' >طباعه</a></td>";*/
+
+                    HTML += "</tr>";
+                });
+                HTML += "</table>";
+                document.getElementById("ShoppingCart").innerHTML = HTML;
+            }
+        });
+        }
+    function deletefromCart(id) {
+        var custid = localStorage.getItem('CustCode');
+              $.ajax({
+            type: "POST",
+            url: "@Url.Action("deletefromCart", "Shopping")",
+                  data: "{'id':" + id + ",'custid':" + custid + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: '',
+            success: function (res) {
+                if (res == 1) {
+                    alert('تم الحذف بنجاح!');
+                    GetOrders();
+                  
+
+                }
+            }
+        });
+
+        }
+</script>

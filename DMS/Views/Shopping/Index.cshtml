@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>All items</h2>
+<div class="table-responsive direction" id="InvoicesDiv">
+
+</div>
+<script>
+   
+    $(document).ready(function () {
+        GetItemList();
+       
+    })
+    function GetItemList() {
+        
+        var type = 0;
+             $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetItemList", "Shopping")",
+                 data: "{'type':'" + type + "'}",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+                 success: function (data) {
+                     console.log(data)
+                         var HTML = "<div  class='row'>";
+                         HTML = "<div id='BoxData' class='card col-md-5'>";
+                     $.each(data, function (key, value) {
+                         console.log(value.img)
+                         HTML += "<img class='card - img - top 'src='"+value.im+"' alt='Card image cap'>";
+                         HTML += "<div  class='card-body'>";
+                         HTML += "<h5 class='card - title'>" + value.ItemName + "</h5>";
+                         HTML += "<p class='card - text'>" + value.Description + " </p> "
+                         var admin = localStorage.getItem('CustName');
+                       
+                         if (admin == "Admin") {
+                             HTML += " <a id='del' onclick='deleteItem(" + value.id + ");' class='btn btn-primary' > Delete </a > "
+                         }
+                         HTML += " <a onclick='AddCart(" + value.id + ");' class='btn btn-primary' > Add to cart </a > "
+                         
+                         HTML+="</br>"
+
+
+
+                });
+                HTML += "</div>";
+                     HTML += "</div>";
+                     HTML += "</div>";
+                     document.getElementById("InvoicesDiv").innerHTML = HTML;
+                   
+                 }
+                
+             });
+
+        
+    }
+    
+
+    function deleteItem(id) {
+        var custid = localStorage.getItem('CustCode');
+      
+
+              $.ajax({
+            type: "POST",
+            url: "@Url.Action("deleteItem", "Shopping")",
+                  data: "{'id':" + id + ",'custid':" + custid + "}",
+            contentType: "application/json; charset=utf-8",
+            dataType: '',
+            success: function (res) {
+                if (res == 1) {
+                    alert('تم الحذف بنجاح!');
+                    GetItemList();
+
+
+                }
+            }
+        });
+
+    }
+    function AddCart(itemid) {
+        var userid = localStorage.getItem('CustCode');
+           $.ajax({
+               type: "POST",
+                contentType: "application/json; charset=utf-8",
+               url: "@Url.Action("AddCart", "Shopping")",
+               data: "{'itemId':'" + itemid + "','userid':'" + userid + "'}",
+                dataType: "json",
+
+
+
+        });
+    }
+
+   
+</script>

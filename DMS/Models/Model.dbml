@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="DMS" Class="ModelDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=DESKTOP-D89AIE6;Initial Catalog=DMS;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="DMSConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.UOM" Member="UOMs">
+    <Type Name="UOM">
+      <Column Name="id" Type="System.String" DbType="NChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UOM" Member="UOM1" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Customers" Member="Customers">
+    <Type Name="Customer">
+      <Column Name="CustCode" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CustDescArab" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="CustDescEng" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="sex" Type="System.Byte" DbType="TinyInt" CanBeNull="true" />
+      <Column Name="Phone" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Order_Header" Member="Order_Headers">
+    <Type Name="Order_Header">
+      <Column Name="id" Type="System.String" DbType="NChar(30) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="OrderDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="RequestDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DueDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Status" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="CustomerId" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="TaxCode" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="TaxValue" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="DiscountCode" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="DiscountValue" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="TotalPrice" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="orderId" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Order_Detail" Member="Order_Details">
+    <Type Name="Order_Detail">
+      <Column Name="id" Type="System.String" DbType="NChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ItemId" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="ItemPrice" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Qty" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="TotalPrice" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="UOM" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="Tax" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="Discount" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="itemName" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="custid" Type="System.String" DbType="NChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.image" Member="images">
+    <Type Name="image">
+      <Column Name="id" Type="System.String" DbType="NChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="itemid" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="imageByte" Type="System.Data.Linq.Binary" DbType="Image" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="imagePath" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Item" Member="Items">
+    <Type Name="Item">
+      <Column Name="id" Type="System.String" DbType="NChar(10) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ItemName" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="Category" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="ItemPrice" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="UOM" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="QTY" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="Description" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="itemColor" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="itemTax" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="imagePath" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="imageByte" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>
